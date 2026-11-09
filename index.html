@@ -1,134 +1,172 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>StarMaker ID Search</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#080808;color:#fff;font-family:Arial;padding:15px}
-.main{max-width:850px;margin:auto}
-header{text-align:center;padding:20px 5px}
-h1{color:#e9bd45;margin:0 0 8px}
-.sub{color:#aaa;font-size:13px}
-.card{background:#171717;border:1px solid #59451b;border-radius:13px;padding:16px;margin:15px 0}
-h2{color:#e9bd45;font-size:18px;margin-top:0}
-input{width:100%;padding:14px;background:#080808;border:1px solid #806329;border-radius:8px;color:white;font-size:16px;margin:8px 0}
-button{padding:12px 16px;background:#d9ad37;color:#111;border:0;border-radius:8px;font-weight:bold;margin:5px 3px;cursor:pointer}
-.secondary{background:#333;color:white}
-.green{background:#168b50;color:white}
-.status{color:#e9bd45;font-size:13px;overflow-wrap:anywhere}
-.profile{display:flex;gap:15px;align-items:center;flex-wrap:wrap}
-.profile img{width:85px;height:85px;object-fit:cover;border-radius:50%;border:2px solid #d9ad37}
-.name{font-size:20px;color:#f0c653;font-weight:bold}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:9px}
-.item{background:#222;padding:11px;border-radius:8px;overflow-wrap:anywhere}
-.item small{display:block;color:#aaa;margin-bottom:6px}
-.item b{font-size:14px;overflow-wrap:anywhere}
-pre{background:#080808;padding:12px;border-radius:8px;white-space:pre-wrap;overflow-wrap:anywhere;max-height:450px;overflow:auto;font-size:12px;color:#a8e6a0}
+body{
+ margin:0;background:#080808;color:#fff;
+ font-family:Arial,sans-serif;padding:16px;
+}
+.container{max-width:760px;margin:auto}
+header{text-align:center;padding:25px 5px}
+.logo{
+ width:65px;height:65px;border-radius:50%;
+ border:2px solid #e5b943;display:flex;
+ align-items:center;justify-content:center;
+ margin:auto auto 12px;font-size:30px;
+ background:#211a0b;
+}
+h1{color:#e9bd45;margin:5px;font-size:27px}
+.subtitle{color:#aaa;font-size:13px}
+.search-card,.section{
+ background:#171717;border:1px solid #59451c;
+ border-radius:15px;padding:18px;margin:15px 0;
+}
+.search-card h2{text-align:center;color:#e9bd45}
+input{
+ width:100%;padding:15px;background:#090909;
+ color:white;border:1px solid #806329;
+ border-radius:9px;font-size:16px;margin:10px 0;
+ outline:none;
+}
+button{
+ width:100%;padding:14px;border:0;border-radius:9px;
+ background:linear-gradient(100deg,#d5a32b,#f5d779);
+ color:#171008;font-weight:bold;font-size:16px;
+ cursor:pointer;
+}
+button:disabled{opacity:.6}
+.status{text-align:center;color:#e9bd45;font-size:13px;margin:14px 0}
 .hidden{display:none}
-.song{border-top:1px solid #444;padding:12px 0}
-a{color:#e9bd45}
-footer{text-align:center;color:#888;font-size:12px;padding:20px}
+.profile{text-align:center;padding:12px}
+.profile img{
+ width:105px;height:105px;object-fit:cover;
+ border-radius:50%;border:3px solid #e5b943;
+ background:#222;
+}
+.username{font-size:22px;color:#f2cc64;font-weight:bold;margin:10px}
+.signature{font-size:13px;color:#bbb;overflow-wrap:anywhere}
+.grid{
+ display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:10px;
+}
+.item{
+ background:#222;padding:12px;border-radius:9px;
+ min-width:0;overflow-wrap:anywhere;
+}
+.item small{display:block;color:#aaa;font-size:12px;margin-bottom:7px}
+.item b{font-size:14px;color:#f3d47d}
+.section h3{color:#e9bd45;margin-top:0}
+.record{
+ border-top:1px solid #444;padding:13px 0;
+ overflow-wrap:anywhere;
+}
+.record img{
+ width:100%;max-width:150px;border-radius:8px;
+ margin-bottom:8px;
+}
+.record a{color:#e9bd45;text-decoration:none}
+.empty{text-align:center;color:#aaa;padding:15px}
+footer{text-align:center;color:#777;font-size:12px;padding:20px}
+@media(max-width:420px){
+ body{padding:10px}
+ .grid{grid-template-columns:1fr 1fr}
+ h1{font-size:23px}
+}
 </style>
 </head>
 <body>
-<div class="main">
+<div class="container">
 
 <header>
-<h1>⭐ StarMaker ID Explorer</h1>
-<div class="sub">Profile • VIP • Family • Recordings • Statistics</div>
+ <div class="logo">⭐</div>
+ <h1>StarMaker ID Search</h1>
+ <div class="subtitle">StarMaker User Information Finder</div>
 </header>
 
-<div class="card">
-<h2>🔎 StarMaker ID Search</h2>
-<input id="sid" type="text" inputmode="numeric" placeholder="Enter StarMaker SID">
-<button onclick="searchID()">Search ID</button>
-<button class="secondary" onclick="clearAll()">Clear</button>
-<p id="status" class="status">Enter a StarMaker SID to search.</p>
+<div class="search-card">
+ <h2>🔍 Search StarMaker ID</h2>
+ <input id="sid" type="text" inputmode="numeric"
+ placeholder="Enter StarMaker SID">
+ <button id="searchBtn" onclick="searchUser()">SEARCH NOW</button>
+ <div id="status" class="status">Enter your StarMaker ID</div>
 </div>
 
-<div id="result" class="hidden">
+<div id="results" class="hidden">
 
-<div class="card">
-<h2>👤 User Profile</h2>
-<div class="profile">
-<img id="photo" src="" alt="Profile" onerror="this.style.display='none'">
-<div>
-<div id="name" class="name"></div>
-<div id="stage" class="sub"></div>
-<div id="signature" class="sub"></div>
-</div>
-</div>
-</div>
+ <div class="section profile">
+  <img id="photo" src="" alt="Profile Photo">
+  <div id="username" class="username"></div>
+  <div id="stage" class="subtitle"></div>
+  <p id="signature" class="signature"></p>
+ </div>
 
-<div class="card">
-<h2>📋 Account Information</h2>
-<div id="account" class="grid"></div>
-</div>
+ <div class="section">
+  <h3>👤 Profile Information</h3>
+  <div id="profileFields" class="grid"></div>
+ </div>
 
-<div class="card">
-<h2>👑 VIP & Verification</h2>
-<div id="vip" class="grid"></div>
-</div>
+ <div class="section">
+  <h3>👑 VIP & Verification</h3>
+  <div id="vipFields" class="grid"></div>
+ </div>
 
-<div class="card">
-<h2>👨‍👩‍👧 Family Information</h2>
-<div id="family" class="grid"></div>
-</div>
+ <div class="section">
+  <h3>👨‍👩‍👧 Family Information</h3>
+  <div id="familyFields" class="grid"></div>
+ </div>
 
-<div class="card">
-<h2>🎵 Recordings Found</h2>
-<div id="recordings"></div>
-</div>
-
-<div class="card">
-<h2>📊 Full JSON Response</h2>
-<button class="green" onclick="copyJSON()">Copy JSON</button>
-<button class="secondary" onclick="downloadJSON()">Download JSON</button>
-<pre id="json"></pre>
-</div>
+ <div class="section">
+  <h3>🎵 Recording Information</h3>
+  <div id="recordings"></div>
+ </div>
 
 </div>
 
-<footer>StarMaker API Explorer • Data shown only when available in API response</footer>
+<footer>StarMaker ID Search • Information available from public API data</footer>
 </div>
 
 <script>
 "use strict";
 
-const API = "https://api.starmakerstudios.com/web/m/office/recordings";
-const PROXY = "https://proxy.cors.dev/";
-let foundData = null;
+/* API request */
+const API_URL =
+"https://api.starmakerstudios.com/web/m/office/recordings";
+const PROXY_URL = "https://proxy.cors.dev/";
 
-function el(id){
- return document.getElementById(id);
-}
+const $ = id => document.getElementById(id);
 
-function value(obj,key){
- const v = obj && obj[key];
+function displayValue(v){
  if(v === undefined || v === null || v === "") return "Not Available";
+ if(typeof v === "boolean") return v ? "Yes" : "No";
  if(typeof v === "object") return JSON.stringify(v);
  return String(v);
 }
 
-function addField(container,label,val){
- const div = document.createElement("div");
- div.className = "item";
- const small = document.createElement("small");
- small.textContent = label;
- const bold = document.createElement("b");
- bold.textContent = val;
- div.append(small,bold);
- container.appendChild(div);
+function addField(container,label,value){
+ const box=document.createElement("div");
+ box.className="item";
+
+ const small=document.createElement("small");
+ small.textContent=label;
+
+ const bold=document.createElement("b");
+ bold.textContent=displayValue(value);
+
+ box.append(small,bold);
+ container.appendChild(box);
 }
 
-function showFields(id,obj,fields){
- const box = el(id);
- box.innerHTML = "";
+function showFields(containerId,obj,fields){
+ const container=$(containerId);
+ container.innerHTML="";
+
  fields.forEach(([label,key])=>{
-   addField(box,label,value(obj,key));
+  addField(container,label,obj ? obj[key] : undefined);
  });
 }
 
@@ -136,182 +174,177 @@ function getUser(sm){
  return sm.user || (sm.record && sm.record.user) || {};
 }
 
-async function searchID(){
- const sid = el("sid").value.trim();
- const status = el("status");
+function getSID(item){
+ const sm=item.sm || {};
+ const user=getUser(sm);
+ return [
+  user.sid,
+  user.id,
+  sm.user_id,
+  sm.sid,
+  sm.record && sm.record.user_id
+ ].filter(v=>v!==undefined && v!==null).map(String);
+}
+
+async function searchUser(){
+ const sid=$("sid").value.trim();
+ const status=$("status");
+ const btn=$("searchBtn");
 
  if(!/^\d{5,25}$/.test(sid)){
-   status.textContent = "Please enter a valid numeric StarMaker SID.";
-   return;
+  status.textContent="Please enter a valid numeric StarMaker SID.";
+  return;
  }
 
- status.textContent = "Loading API data... Please wait.";
- el("result").classList.add("hidden");
- foundData = null;
+ btn.disabled=true;
+ btn.textContent="SEARCHING...";
+ status.textContent="Searching StarMaker information...";
+ $("results").classList.add("hidden");
 
  try{
-   const response = await fetch(PROXY + API,{
-     method:"GET",
-     credentials:"omit",
-     headers:{
-       "Accept":"application/json, text/plain, */*"
-     }
-   });
+  const response=await fetch(PROXY_URL+API_URL,{
+   method:"GET",
+   credentials:"omit",
+   headers:{
+    "Accept":"application/json, text/plain, */*"
+   }
+  });
 
-   const text = await response.text();
+  if(!response.ok){
+   throw new Error("HTTP "+response.status);
+  }
 
-   if(!response.ok){
-     throw new Error("HTTP " + response.status + ": " + text.slice(0,300));
+  const data=await response.json();
+  const items=Array.isArray(data.items)?data.items:[];
+
+  const matches=items.filter(item=>
+   getSID(item).includes(sid)
+  );
+
+  if(matches.length===0){
+   status.textContent=
+   "This ID was not found in the available recordings feed. Try again later.";
+   return;
+  }
+
+  const first=matches[0].sm || {};
+  const user=getUser(first);
+  const family=user.family || {};
+
+  $("results").classList.remove("hidden");
+
+  $("photo").src=user.profile_image || "";
+  $("photo").onerror=function(){
+   this.style.display="none";
+  };
+
+  $("username").textContent=displayValue(user.name);
+  $("stage").textContent="Stage Name: "+displayValue(user.stage_name);
+  $("signature").textContent=displayValue(user.signature);
+
+  showFields("profileFields",user,[
+   ["StarMaker SID","sid"],
+   ["User ID","id"],
+   ["Username","name"],
+   ["Stage Name","stage_name"],
+   ["Gender","gender"],
+   ["Age","age"],
+   ["Birthday","birthmmdd"],
+   ["Birth Date","birth_date"],
+   ["Hometown","hometown"],
+   ["Account Created","created_on"],
+   ["User Level","user_level"],
+   ["Experience","experience"],
+   ["Public Profile","is_public"]
+  ]);
+
+  showFields("vipFields",user,[
+   ["VIP Status","is_vip"],
+   ["VIP Level","vip_level"],
+   ["VIP Version","is_vip_v2"],
+   ["Verified Information","v_info"],
+   ["Verification List","v_info_list"],
+   ["Achievements","achieve"],
+   ["Honour List","honour_list"],
+   ["Decoration ID","decoration_id"],
+   ["Portrait Pendant","portrait_pendant_info"]
+  ]);
+
+  showFields("familyFields",family,[
+   ["Family Name","title"],
+   ["Family ID","family_id"],
+   ["Family Slogan","slogan"],
+   ["Group ID","group_id"],
+   ["Region","region"],
+   ["Family Icon","icon"],
+   ["Family Background","background"]
+  ]);
+
+  const recordingBox=$("recordings");
+  recordingBox.innerHTML="";
+
+  matches.forEach(item=>{
+   const sm=item.sm || {};
+   const record=sm.record || {};
+   const song=record.song || {};
+   const rec=record.recording || {};
+
+   const div=document.createElement("div");
+   div.className="record";
+
+   if(song.cover_image){
+    const img=document.createElement("img");
+    img.src=song.cover_image;
+    img.alt="Song Cover";
+    div.appendChild(img);
    }
 
-   const data = JSON.parse(text);
-   const items = Array.isArray(data.items) ? data.items : [];
+   const title=document.createElement("h4");
+   title.textContent=displayValue(song.title);
 
-   const matches = items.filter(item=>{
-     const sm = item.sm || {};
-     const user = getUser(sm);
-     return [
-       user.sid,
-       user.id,
-       sm.user_id,
-       sm.sid,
-       sm.record && sm.record.user_id
-     ].some(x=>x !== undefined && String(x) === sid);
-   });
+   const artist=document.createElement("p");
+   artist.textContent="Artist: "+displayValue(song.artist);
 
-   if(matches.length === 0){
-     status.textContent =
-       "ID not found in the current Recordings Feed. This does not mean the StarMaker ID is invalid.";
-     return;
+   const stats=document.createElement("p");
+   stats.textContent=
+    "Likes: "+displayValue(sm.like_num)+
+    " | Comments: "+displayValue(sm.comment_num)+
+    " | Shares: "+displayValue(sm.share_num)+
+    " | Views: "+displayValue(sm.display_num);
+
+   const details=document.createElement("p");
+   details.textContent=
+    "Score: "+displayValue(rec.score)+
+    " | Grade: "+displayValue(rec.grade)+
+    " | Duration: "+displayValue(rec.duration)+" sec";
+
+   div.append(title,artist,stats,details);
+
+   if(rec.web_url){
+    const link=document.createElement("a");
+    link.href=rec.web_url;
+    link.target="_blank";
+    link.rel="noopener noreferrer";
+    link.textContent="Open Recording";
+    div.appendChild(link);
    }
 
-   const sm = matches[0].sm || {};
-   const user = getUser(sm);
-   foundData = {searched_sid:sid,matched_items:matches};
+   recordingBox.appendChild(div);
+  });
 
-   el("result").classList.remove("hidden");
-   status.textContent = "Success! " + matches.length + " matching recording(s) found.";
-
-   const photo = el("photo");
-   photo.style.display = "";
-   photo.src = user.profile_image || "";
-
-   el("name").textContent = value(user,"name");
-   el("stage").textContent = "Stage Name: " + value(user,"stage_name");
-   el("signature").textContent = "Signature: " + value(user,"signature");
-
-   showFields("account",user,[
-     ["StarMaker SID","sid"],
-     ["User ID","id"],
-     ["Username","name"],
-     ["Stage Name","stage_name"],
-     ["Gender","gender"],
-     ["Age","age"],
-     ["Birth Date","birth_date"],
-     ["Birthday","birthmmdd"],
-     ["Hometown","hometown"],
-     ["Created On","created_on"],
-     ["User Level","user_level"],
-     ["Experience","experience"],
-     ["Public Profile","is_public"]
-   ]);
-
-   showFields("vip",user,[
-     ["VIP Status","is_vip"],
-     ["VIP Level","vip_level"],
-     ["VIP Version 2","is_vip_v2"],
-     ["Verified Information","v_info"],
-     ["Verification List","v_info_list"],
-     ["Achievements","achieve"],
-     ["Honour List","honour_list"],
-     ["Decoration ID","decoration_id"],
-     ["Portrait Pendant","portrait_pendant_info"]
-   ]);
-
-   showFields("family",user.family || {},[
-     ["Family Name","title"],
-     ["Family ID","family_id"],
-     ["Family Slogan","slogan"],
-     ["Group ID","group_id"],
-     ["Region","region"],
-     ["Family Icon","icon"],
-     ["Family Background","background"]
-   ]);
-
-   const recordingBox = el("recordings");
-   recordingBox.innerHTML = "";
-
-   matches.forEach(item=>{
-     const recordSM = item.sm || {};
-     const record = recordSM.record || {};
-     const song = record.song || {};
-     const recording = record.recording || {};
-
-     const div = document.createElement("div");
-     div.className = "song";
-
-     const title = document.createElement("b");
-     title.textContent = value(song,"title");
-     const artist = document.createElement("p");
-     artist.textContent = "Artist: " + value(song,"artist");
-     const stats = document.createElement("p");
-     stats.textContent =
-       "Likes: " + value(recordSM,"like_num") +
-       " | Comments: " + value(recordSM,"comment_num") +
-       " | Shares: " + value(recordSM,"share_num") +
-       " | Views: " + value(recordSM,"display_num");
-
-     const extra = document.createElement("p");
-     extra.textContent =
-       "Recording ID: " + value(recording,"id") +
-       " | Score: " + value(recording,"score") +
-       " | Grade: " + value(recording,"grade");
-
-     div.append(title,artist,stats,extra);
-
-     if(recording.web_url){
-       const link = document.createElement("a");
-       link.href = recording.web_url;
-       link.target = "_blank";
-       link.rel = "noopener";
-       link.textContent = "Open Recording";
-       div.appendChild(link);
-     }
-
-     recordingBox.appendChild(div);
-   });
-
-   el("json").textContent = JSON.stringify(foundData,null,2);
+  status.textContent="✓ Profile data found! "+matches.length+" recording(s).";
 
  }catch(error){
-   status.textContent = "Error: " + error.message;
+  status.textContent="Unable to load data: "+error.message;
+ }finally{
+  btn.disabled=false;
+  btn.textContent="SEARCH NOW";
  }
 }
 
-function clearAll(){
- el("sid").value = "";
- el("result").classList.add("hidden");
- el("status").textContent = "Enter a StarMaker SID to search.";
- foundData = null;
-}
-
-function copyJSON(){
- if(!foundData) return;
- navigator.clipboard.writeText(JSON.stringify(foundData,null,2))
- .then(()=>el("status").textContent="JSON copied successfully.")
- .catch(()=>el("status").textContent="Copy failed.");
-}
-
-function downloadJSON(){
- if(!foundData) return;
- const blob = new Blob([JSON.stringify(foundData,null,2)],{type:"application/json"});
- const url = URL.createObjectURL(blob);
- const a = document.createElement("a");
- a.href = url;
- a.download = "starmaker-user-data.json";
- a.click();
- URL.revokeObjectURL(url);
-}
+$("sid").addEventListener("keydown",event=>{
+ if(event.key==="Enter") searchUser();
+});
 </script>
 </body>
 </html>
