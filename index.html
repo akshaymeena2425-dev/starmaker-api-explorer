@@ -1,387 +1,215 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>StarMaker API Explorer</title>
-
 <style>
 *{box-sizing:border-box}
-
 body{
- margin:0;
- background:#080808;
- color:#eee;
+ margin:0;padding:18px;
+ background:#090909;color:#eee;
  font-family:Arial,sans-serif;
 }
-
-header{
- text-align:center;
- padding:28px 12px;
- background:#15110a;
- border-bottom:2px solid #d6a52a;
-}
-
-h1{
- color:#f4c34e;
- margin:0 0 8px;
-}
-
-header p{color:#bbb;margin:0}
-
-main{
- max-width:950px;
- margin:20px auto;
- padding:12px;
-}
-
+.container{max-width:850px;margin:auto}
+header{text-align:center;padding:22px 5px}
+h1{color:#e9bd45;margin:0 0 8px}
+.subtitle{color:#aaa}
 .card{
- background:#151515;
- border:1px solid #51401c;
- border-radius:12px;
- padding:16px;
- margin-bottom:16px;
+ background:#171717;border:1px solid #5d481b;
+ border-radius:13px;padding:17px;margin:15px 0;
 }
-
-h2{
- color:#f4c34e;
- font-size:19px;
- margin-top:0;
-}
-
-.endpoint{
- font-size:13px;
- overflow-wrap:anywhere;
- color:#9fe4b0;
- background:#080808;
- padding:12px;
- border-radius:8px;
-}
-
-button{
- background:#d6a52a;
- color:#111;
- border:0;
- border-radius:8px;
- padding:11px 15px;
- font-weight:bold;
- cursor:pointer;
- margin:5px 4px 5px 0;
-}
-
-button:disabled{opacity:.5}
-
+h2{font-size:19px;color:#f0c653;margin-top:0}
 input{
- width:100%;
- padding:12px;
- border-radius:8px;
- border:1px solid #555;
- background:#080808;
- color:white;
- margin:8px 0;
+ width:100%;padding:13px;margin:8px 0;
+ background:#090909;border:1px solid #806329;
+ color:white;border-radius:8px;font-size:14px;
 }
-
+button{
+ padding:12px 16px;border:0;border-radius:8px;
+ background:#d6a92e;color:#111;font-weight:bold;
+ cursor:pointer;margin:5px 3px;
+}
+button.secondary{background:#333;color:white}
+button.green{background:#168b50;color:white}
 pre{
- white-space:pre-wrap;
- overflow-wrap:anywhere;
- background:#050505;
- border:1px solid #333;
- border-radius:8px;
- padding:14px;
- max-height:550px;
- overflow:auto;
- font-size:12px;
- line-height:1.5;
+ background:#080808;border:1px solid #333;
+ border-radius:8px;padding:13px;
+ white-space:pre-wrap;overflow-wrap:anywhere;
+ overflow:auto;max-height:500px;color:#a8e6a0;
+ font-size:12px;min-height:100px;
 }
-
-.status{
- color:#f4c34e;
- margin:12px 0;
- overflow-wrap:anywhere;
-}
-
-.small{
- color:#aaa;
- font-size:12px;
- line-height:1.6;
-}
-
-footer{
- text-align:center;
- color:#777;
- padding:25px;
-}
-
-.success{color:#69e69a}
-.error{color:#ff7777}
+.status{color:#f0c653;overflow-wrap:anywhere}
+.small{color:#999;font-size:12px;line-height:1.6}
 </style>
 </head>
-
 <body>
+<div class="container">
 
 <header>
 <h1>⭐ StarMaker API Explorer</h1>
-<p>Free API Testing & JSON Viewer</p>
+<div class="subtitle">Free API Testing & JSON Viewer</div>
 </header>
 
-<main>
-
 <div class="card">
-<h2>Working API</h2>
+<h2>Working API Endpoint</h2>
+<input id="endpoint" type="url"
+value="https://api.starmakerstudios.com/web/m/office/recordings"
+placeholder="Enter API URL">
 
-<div class="endpoint" id="api">
-https://api.starmakerstudios.com/web/m/office/recordings
-</div>
-
-<button id="testButton" onclick="testAPI()">
-Test Recordings API
-</button>
-
-<button onclick="copyAPI()">
-Copy Endpoint
-</button>
-
-<div class="status" id="status">
-Ready to test
-</div>
+<button onclick="testAPI()">Test API</button>
+<button class="secondary" onclick="copyEndpoint()">Copy Endpoint</button>
+<p class="status" id="status">Ready to test</p>
+<p class="small">
+Public GET request through cors.dev proxy.
+</p>
 </div>
 
 <div class="card">
 <h2>JSON Response Viewer</h2>
+<input id="search" type="text"
+placeholder="Search JSON response..."
+oninput="searchJSON()">
 
-<input
- id="search"
- placeholder="Response mein kuch search karein..."
- oninput="searchJSON()"
->
-
-<button onclick="copyResponse()">
-Copy JSON
-</button>
-
-<button onclick="downloadJSON()">
-Download JSON
-</button>
-
-<button onclick="showFullJSON()">
-Show Full JSON
-</button>
-
+<button class="green" onclick="copyJSON()">Copy JSON</button>
+<button class="secondary" onclick="downloadJSON()">Download JSON</button>
 <pre id="output">API response yahan dikhega...</pre>
 </div>
 
 <div class="card">
 <h2>API Information</h2>
-
-<p>Endpoint: Recordings Feed</p>
-<p>Proxy: cors.dev</p>
+<p>Endpoint: StarMaker Recordings Feed</p>
 <p>Method: GET</p>
-<p>Status: Public API test</p>
-
+<p>Proxy: cors.dev</p>
 <p class="small">
-This tool uses a public CORS proxy for GET requests.
-The API may still reject requests or require additional
-parameters. Never send private tokens or passwords
-through a public proxy.
+Note: Ye endpoint recordings feed ke liye hai.
+Isse full profile ya live room details milna guaranteed nahi hai.
 </p>
 </div>
 
-</main>
-
-<footer>
-StarMaker API Explorer • Free Version
-</footer>
+</div>
 
 <script>
+"use strict";
 
-const endpoint =
-"https://api.starmakerstudios.com/web/m/office/recordings";
-
-const proxy =
-"https://proxy.cors.dev/";
-
-let responseData = null;
-
-let fullResponse = "";
+const proxy = "https://proxy.cors.dev/";
+let jsonData = null;
+let responseText = "";
 
 async function testAPI(){
-
+ const endpoint = document.getElementById("endpoint").value.trim();
  const status = document.getElementById("status");
  const output = document.getElementById("output");
- const button = document.getElementById("testButton");
 
- button.disabled = true;
-
- status.className = "status";
- status.textContent = "Connecting to StarMaker API...";
-
- output.textContent = "Loading API response...";
-
- responseData = null;
- fullResponse = "";
-
- try{
-
-  const response = await fetch(
-   proxy + endpoint,
-   {
-    method: "GET",
-    credentials: "omit",
-    headers: {
-     "Accept": "application/json, text/plain, */*"
-    }
-   }
-  );
-
-  const text = await response.text();
-
-  fullResponse = text;
-
-  try{
-   responseData = JSON.parse(text);
-
-   output.textContent =
-    JSON.stringify(responseData, null, 2);
-
-  }catch(error){
-
-   output.textContent = text;
-
-  }
-
-  if(response.ok){
-
-   status.className = "status success";
-
-   status.textContent =
-    "HTTP " + response.status +
-    " • Response received successfully";
-
-  }else{
-
-   status.className = "status error";
-
-   const proxyError =
-    response.headers.get("X-Cors-Error");
-
-   status.textContent =
-    "HTTP " + response.status +
-    " • " + (proxyError || "API request failed");
-
-  }
-
- }catch(error){
-
-  status.className = "status error";
-
-  status.textContent = "Network / Proxy Error";
-
-  output.textContent =
-   error.message +
-   "\n\nPossible reasons:" +
-   "\n1. Internet connection problem" +
-   "\n2. Proxy unavailable" +
-   "\n3. API server not responding";
-
+ if(!endpoint){
+   status.textContent = "Please enter API endpoint.";
+   return;
  }
 
- button.disabled = false;
+ try{
+   new URL(endpoint);
+ }catch(e){
+   status.textContent = "Invalid URL.";
+   return;
+ }
 
+ status.textContent = "Loading... Please wait.";
+ output.textContent = "API request chal rahi hai...";
+
+ try{
+   const response = await fetch(
+     proxy + endpoint,
+     {
+       method: "GET",
+       credentials: "omit",
+       headers: {
+         "Accept": "application/json, text/plain, */*"
+       }
+     }
+   );
+
+   responseText = await response.text();
+
+   status.textContent = "HTTP Status: " + response.status;
+
+   try{
+     jsonData = JSON.parse(responseText);
+     output.textContent = JSON.stringify(jsonData,null,2);
+   }catch(e){
+     jsonData = null;
+     output.textContent = responseText || "Empty response";
+   }
+
+   if(!response.ok){
+     status.textContent += " - API request failed";
+   }else{
+     status.textContent += " - Response received";
+   }
+
+ }catch(error){
+   jsonData = null;
+   responseText = "";
+   status.textContent = "Network/CORS Error: " + error.message;
+   output.textContent =
+     "Request failed.\n\n" +
+     "Possible reasons:\n" +
+     "1. Proxy service unavailable\n" +
+     "2. API server not responding\n" +
+     "3. Network problem\n\n" +
+     "Error: " + error.message;
+ }
 }
 
-function copyAPI(){
-
- navigator.clipboard.writeText(endpoint)
- .then(()=>alert("Endpoint copied"))
- .catch(()=>alert("Copy failed"));
-
-}
-
-function copyResponse(){
-
- const value =
- document.getElementById("output").textContent;
-
+function copyEndpoint(){
+ const value = document.getElementById("endpoint").value;
  navigator.clipboard.writeText(value)
- .then(()=>alert("Response copied"))
- .catch(()=>alert("Copy failed"));
+ .then(()=>document.getElementById("status").textContent="Endpoint copied!")
+ .catch(()=>document.getElementById("status").textContent="Copy failed.");
+}
 
+function copyJSON(){
+ const value = document.getElementById("output").textContent;
+ navigator.clipboard.writeText(value)
+ .then(()=>document.getElementById("status").textContent="JSON copied!")
+ .catch(()=>document.getElementById("status").textContent="Copy failed.");
 }
 
 function downloadJSON(){
-
- if(responseData === null){
-
-  if(!fullResponse){
-   alert("Pehle API test karein");
-   return;
-  }
-
- }
-
- const data =
- responseData !== null
- ? JSON.stringify(responseData,null,2)
- : fullResponse;
-
- const blob = new Blob(
-  [data],
-  {type:"application/json"}
- );
-
+ const value = document.getElementById("output").textContent;
+ const blob = new Blob([value],{type:"application/json"});
  const url = URL.createObjectURL(blob);
-
  const a = document.createElement("a");
-
  a.href = url;
  a.download = "starmaker-response.json";
-
  a.click();
-
  URL.revokeObjectURL(url);
-
-}
-
-function showFullJSON(){
-
- document.getElementById("search").value = "";
-
- document.getElementById("output").textContent =
-  fullResponse || "Pehle API test karein";
-
 }
 
 function searchJSON(){
+ const query = document.getElementById("search").value.trim().toLowerCase();
+ const output = document.getElementById("output");
 
- const q =
- document.getElementById("search").value.toLowerCase();
-
- const output =
- document.getElementById("output");
-
- if(!fullResponse){
-  return;
+ if(!query){
+   output.textContent = jsonData
+     ? JSON.stringify(jsonData,null,2)
+     : responseText || "API response yahan dikhega...";
+   return;
  }
 
- if(!q){
-  output.textContent = fullResponse;
-  return;
+ if(!jsonData){
+   output.textContent = "Search ke liye valid JSON response zaroori hai.";
+   return;
  }
 
- const lines = fullResponse.split("\n");
-
- const matches = lines.filter(line =>
-  line.toLowerCase().includes(q)
- );
+ const source = JSON.stringify(jsonData,null,2);
+ const lines = source.split("\n");
+ const matches = lines.filter(line=>line.toLowerCase().includes(query));
 
  output.textContent = matches.length
-  ? matches.join("\n")
-  : "No matching result found";
-
+   ? matches.join("\n")
+   : "No matching result found.";
 }
-
 </script>
-
 </body>
 </html>
