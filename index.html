@@ -1,214 +1,316 @@
 
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>StarMaker API Explorer</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>StarMaker ID Search</title>
 <style>
 *{box-sizing:border-box}
-body{
- margin:0;padding:18px;
- background:#090909;color:#eee;
- font-family:Arial,sans-serif;
-}
-.container{max-width:850px;margin:auto}
-header{text-align:center;padding:22px 5px}
+body{margin:0;background:#080808;color:#fff;font-family:Arial;padding:15px}
+.main{max-width:850px;margin:auto}
+header{text-align:center;padding:20px 5px}
 h1{color:#e9bd45;margin:0 0 8px}
-.subtitle{color:#aaa}
-.card{
- background:#171717;border:1px solid #5d481b;
- border-radius:13px;padding:17px;margin:15px 0;
-}
-h2{font-size:19px;color:#f0c653;margin-top:0}
-input{
- width:100%;padding:13px;margin:8px 0;
- background:#090909;border:1px solid #806329;
- color:white;border-radius:8px;font-size:14px;
-}
-button{
- padding:12px 16px;border:0;border-radius:8px;
- background:#d6a92e;color:#111;font-weight:bold;
- cursor:pointer;margin:5px 3px;
-}
-button.secondary{background:#333;color:white}
-button.green{background:#168b50;color:white}
-pre{
- background:#080808;border:1px solid #333;
- border-radius:8px;padding:13px;
- white-space:pre-wrap;overflow-wrap:anywhere;
- overflow:auto;max-height:500px;color:#a8e6a0;
- font-size:12px;min-height:100px;
-}
-.status{color:#f0c653;overflow-wrap:anywhere}
-.small{color:#999;font-size:12px;line-height:1.6}
+.sub{color:#aaa;font-size:13px}
+.card{background:#171717;border:1px solid #59451b;border-radius:13px;padding:16px;margin:15px 0}
+h2{color:#e9bd45;font-size:18px;margin-top:0}
+input{width:100%;padding:14px;background:#080808;border:1px solid #806329;border-radius:8px;color:white;font-size:16px;margin:8px 0}
+button{padding:12px 16px;background:#d9ad37;color:#111;border:0;border-radius:8px;font-weight:bold;margin:5px 3px;cursor:pointer}
+.secondary{background:#333;color:white}
+.green{background:#168b50;color:white}
+.status{color:#e9bd45;font-size:13px;overflow-wrap:anywhere}
+.profile{display:flex;gap:15px;align-items:center;flex-wrap:wrap}
+.profile img{width:85px;height:85px;object-fit:cover;border-radius:50%;border:2px solid #d9ad37}
+.name{font-size:20px;color:#f0c653;font-weight:bold}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:9px}
+.item{background:#222;padding:11px;border-radius:8px;overflow-wrap:anywhere}
+.item small{display:block;color:#aaa;margin-bottom:6px}
+.item b{font-size:14px;overflow-wrap:anywhere}
+pre{background:#080808;padding:12px;border-radius:8px;white-space:pre-wrap;overflow-wrap:anywhere;max-height:450px;overflow:auto;font-size:12px;color:#a8e6a0}
+.hidden{display:none}
+.song{border-top:1px solid #444;padding:12px 0}
+a{color:#e9bd45}
+footer{text-align:center;color:#888;font-size:12px;padding:20px}
 </style>
 </head>
 <body>
-<div class="container">
+<div class="main">
 
 <header>
-<h1>⭐ StarMaker API Explorer</h1>
-<div class="subtitle">Free API Testing & JSON Viewer</div>
+<h1>⭐ StarMaker ID Explorer</h1>
+<div class="sub">Profile • VIP • Family • Recordings • Statistics</div>
 </header>
 
 <div class="card">
-<h2>Working API Endpoint</h2>
-<input id="endpoint" type="url"
-value="https://api.starmakerstudios.com/web/m/office/recordings"
-placeholder="Enter API URL">
+<h2>🔎 StarMaker ID Search</h2>
+<input id="sid" type="text" inputmode="numeric" placeholder="Enter StarMaker SID">
+<button onclick="searchID()">Search ID</button>
+<button class="secondary" onclick="clearAll()">Clear</button>
+<p id="status" class="status">Enter a StarMaker SID to search.</p>
+</div>
 
-<button onclick="testAPI()">Test API</button>
-<button class="secondary" onclick="copyEndpoint()">Copy Endpoint</button>
-<p class="status" id="status">Ready to test</p>
-<p class="small">
-Public GET request through cors.dev proxy.
-</p>
+<div id="result" class="hidden">
+
+<div class="card">
+<h2>👤 User Profile</h2>
+<div class="profile">
+<img id="photo" src="" alt="Profile" onerror="this.style.display='none'">
+<div>
+<div id="name" class="name"></div>
+<div id="stage" class="sub"></div>
+<div id="signature" class="sub"></div>
+</div>
+</div>
 </div>
 
 <div class="card">
-<h2>JSON Response Viewer</h2>
-<input id="search" type="text"
-placeholder="Search JSON response..."
-oninput="searchJSON()">
+<h2>📋 Account Information</h2>
+<div id="account" class="grid"></div>
+</div>
 
+<div class="card">
+<h2>👑 VIP & Verification</h2>
+<div id="vip" class="grid"></div>
+</div>
+
+<div class="card">
+<h2>👨‍👩‍👧 Family Information</h2>
+<div id="family" class="grid"></div>
+</div>
+
+<div class="card">
+<h2>🎵 Recordings Found</h2>
+<div id="recordings"></div>
+</div>
+
+<div class="card">
+<h2>📊 Full JSON Response</h2>
 <button class="green" onclick="copyJSON()">Copy JSON</button>
 <button class="secondary" onclick="downloadJSON()">Download JSON</button>
-<pre id="output">API response yahan dikhega...</pre>
+<pre id="json"></pre>
 </div>
 
-<div class="card">
-<h2>API Information</h2>
-<p>Endpoint: StarMaker Recordings Feed</p>
-<p>Method: GET</p>
-<p>Proxy: cors.dev</p>
-<p class="small">
-Note: Ye endpoint recordings feed ke liye hai.
-Isse full profile ya live room details milna guaranteed nahi hai.
-</p>
 </div>
 
+<footer>StarMaker API Explorer • Data shown only when available in API response</footer>
 </div>
 
 <script>
 "use strict";
 
-const proxy = "https://proxy.cors.dev/";
-let jsonData = null;
-let responseText = "";
+const API = "https://api.starmakerstudios.com/web/m/office/recordings";
+const PROXY = "https://proxy.cors.dev/";
+let foundData = null;
 
-async function testAPI(){
- const endpoint = document.getElementById("endpoint").value.trim();
- const status = document.getElementById("status");
- const output = document.getElementById("output");
+function el(id){
+ return document.getElementById(id);
+}
 
- if(!endpoint){
-   status.textContent = "Please enter API endpoint.";
+function value(obj,key){
+ const v = obj && obj[key];
+ if(v === undefined || v === null || v === "") return "Not Available";
+ if(typeof v === "object") return JSON.stringify(v);
+ return String(v);
+}
+
+function addField(container,label,val){
+ const div = document.createElement("div");
+ div.className = "item";
+ const small = document.createElement("small");
+ small.textContent = label;
+ const bold = document.createElement("b");
+ bold.textContent = val;
+ div.append(small,bold);
+ container.appendChild(div);
+}
+
+function showFields(id,obj,fields){
+ const box = el(id);
+ box.innerHTML = "";
+ fields.forEach(([label,key])=>{
+   addField(box,label,value(obj,key));
+ });
+}
+
+function getUser(sm){
+ return sm.user || (sm.record && sm.record.user) || {};
+}
+
+async function searchID(){
+ const sid = el("sid").value.trim();
+ const status = el("status");
+
+ if(!/^\d{5,25}$/.test(sid)){
+   status.textContent = "Please enter a valid numeric StarMaker SID.";
    return;
  }
 
- try{
-   new URL(endpoint);
- }catch(e){
-   status.textContent = "Invalid URL.";
-   return;
- }
-
- status.textContent = "Loading... Please wait.";
- output.textContent = "API request chal rahi hai...";
+ status.textContent = "Loading API data... Please wait.";
+ el("result").classList.add("hidden");
+ foundData = null;
 
  try{
-   const response = await fetch(
-     proxy + endpoint,
-     {
-       method: "GET",
-       credentials: "omit",
-       headers: {
-         "Accept": "application/json, text/plain, */*"
-       }
+   const response = await fetch(PROXY + API,{
+     method:"GET",
+     credentials:"omit",
+     headers:{
+       "Accept":"application/json, text/plain, */*"
      }
-   );
+   });
 
-   responseText = await response.text();
-
-   status.textContent = "HTTP Status: " + response.status;
-
-   try{
-     jsonData = JSON.parse(responseText);
-     output.textContent = JSON.stringify(jsonData,null,2);
-   }catch(e){
-     jsonData = null;
-     output.textContent = responseText || "Empty response";
-   }
+   const text = await response.text();
 
    if(!response.ok){
-     status.textContent += " - API request failed";
-   }else{
-     status.textContent += " - Response received";
+     throw new Error("HTTP " + response.status + ": " + text.slice(0,300));
    }
 
+   const data = JSON.parse(text);
+   const items = Array.isArray(data.items) ? data.items : [];
+
+   const matches = items.filter(item=>{
+     const sm = item.sm || {};
+     const user = getUser(sm);
+     return [
+       user.sid,
+       user.id,
+       sm.user_id,
+       sm.sid,
+       sm.record && sm.record.user_id
+     ].some(x=>x !== undefined && String(x) === sid);
+   });
+
+   if(matches.length === 0){
+     status.textContent =
+       "ID not found in the current Recordings Feed. This does not mean the StarMaker ID is invalid.";
+     return;
+   }
+
+   const sm = matches[0].sm || {};
+   const user = getUser(sm);
+   foundData = {searched_sid:sid,matched_items:matches};
+
+   el("result").classList.remove("hidden");
+   status.textContent = "Success! " + matches.length + " matching recording(s) found.";
+
+   const photo = el("photo");
+   photo.style.display = "";
+   photo.src = user.profile_image || "";
+
+   el("name").textContent = value(user,"name");
+   el("stage").textContent = "Stage Name: " + value(user,"stage_name");
+   el("signature").textContent = "Signature: " + value(user,"signature");
+
+   showFields("account",user,[
+     ["StarMaker SID","sid"],
+     ["User ID","id"],
+     ["Username","name"],
+     ["Stage Name","stage_name"],
+     ["Gender","gender"],
+     ["Age","age"],
+     ["Birth Date","birth_date"],
+     ["Birthday","birthmmdd"],
+     ["Hometown","hometown"],
+     ["Created On","created_on"],
+     ["User Level","user_level"],
+     ["Experience","experience"],
+     ["Public Profile","is_public"]
+   ]);
+
+   showFields("vip",user,[
+     ["VIP Status","is_vip"],
+     ["VIP Level","vip_level"],
+     ["VIP Version 2","is_vip_v2"],
+     ["Verified Information","v_info"],
+     ["Verification List","v_info_list"],
+     ["Achievements","achieve"],
+     ["Honour List","honour_list"],
+     ["Decoration ID","decoration_id"],
+     ["Portrait Pendant","portrait_pendant_info"]
+   ]);
+
+   showFields("family",user.family || {},[
+     ["Family Name","title"],
+     ["Family ID","family_id"],
+     ["Family Slogan","slogan"],
+     ["Group ID","group_id"],
+     ["Region","region"],
+     ["Family Icon","icon"],
+     ["Family Background","background"]
+   ]);
+
+   const recordingBox = el("recordings");
+   recordingBox.innerHTML = "";
+
+   matches.forEach(item=>{
+     const recordSM = item.sm || {};
+     const record = recordSM.record || {};
+     const song = record.song || {};
+     const recording = record.recording || {};
+
+     const div = document.createElement("div");
+     div.className = "song";
+
+     const title = document.createElement("b");
+     title.textContent = value(song,"title");
+     const artist = document.createElement("p");
+     artist.textContent = "Artist: " + value(song,"artist");
+     const stats = document.createElement("p");
+     stats.textContent =
+       "Likes: " + value(recordSM,"like_num") +
+       " | Comments: " + value(recordSM,"comment_num") +
+       " | Shares: " + value(recordSM,"share_num") +
+       " | Views: " + value(recordSM,"display_num");
+
+     const extra = document.createElement("p");
+     extra.textContent =
+       "Recording ID: " + value(recording,"id") +
+       " | Score: " + value(recording,"score") +
+       " | Grade: " + value(recording,"grade");
+
+     div.append(title,artist,stats,extra);
+
+     if(recording.web_url){
+       const link = document.createElement("a");
+       link.href = recording.web_url;
+       link.target = "_blank";
+       link.rel = "noopener";
+       link.textContent = "Open Recording";
+       div.appendChild(link);
+     }
+
+     recordingBox.appendChild(div);
+   });
+
+   el("json").textContent = JSON.stringify(foundData,null,2);
+
  }catch(error){
-   jsonData = null;
-   responseText = "";
-   status.textContent = "Network/CORS Error: " + error.message;
-   output.textContent =
-     "Request failed.\n\n" +
-     "Possible reasons:\n" +
-     "1. Proxy service unavailable\n" +
-     "2. API server not responding\n" +
-     "3. Network problem\n\n" +
-     "Error: " + error.message;
+   status.textContent = "Error: " + error.message;
  }
 }
 
-function copyEndpoint(){
- const value = document.getElementById("endpoint").value;
- navigator.clipboard.writeText(value)
- .then(()=>document.getElementById("status").textContent="Endpoint copied!")
- .catch(()=>document.getElementById("status").textContent="Copy failed.");
+function clearAll(){
+ el("sid").value = "";
+ el("result").classList.add("hidden");
+ el("status").textContent = "Enter a StarMaker SID to search.";
+ foundData = null;
 }
 
 function copyJSON(){
- const value = document.getElementById("output").textContent;
- navigator.clipboard.writeText(value)
- .then(()=>document.getElementById("status").textContent="JSON copied!")
- .catch(()=>document.getElementById("status").textContent="Copy failed.");
+ if(!foundData) return;
+ navigator.clipboard.writeText(JSON.stringify(foundData,null,2))
+ .then(()=>el("status").textContent="JSON copied successfully.")
+ .catch(()=>el("status").textContent="Copy failed.");
 }
 
 function downloadJSON(){
- const value = document.getElementById("output").textContent;
- const blob = new Blob([value],{type:"application/json"});
+ if(!foundData) return;
+ const blob = new Blob([JSON.stringify(foundData,null,2)],{type:"application/json"});
  const url = URL.createObjectURL(blob);
  const a = document.createElement("a");
  a.href = url;
- a.download = "starmaker-response.json";
+ a.download = "starmaker-user-data.json";
  a.click();
  URL.revokeObjectURL(url);
-}
-
-function searchJSON(){
- const query = document.getElementById("search").value.trim().toLowerCase();
- const output = document.getElementById("output");
-
- if(!query){
-   output.textContent = jsonData
-     ? JSON.stringify(jsonData,null,2)
-     : responseText || "API response yahan dikhega...";
-   return;
- }
-
- if(!jsonData){
-   output.textContent = "Search ke liye valid JSON response zaroori hai.";
-   return;
- }
-
- const source = JSON.stringify(jsonData,null,2);
- const lines = source.split("\n");
- const matches = lines.filter(line=>line.toLowerCase().includes(query));
-
- output.textContent = matches.length
-   ? matches.join("\n")
-   : "No matching result found.";
 }
 </script>
 </body>
